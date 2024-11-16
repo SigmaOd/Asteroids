@@ -15,18 +15,27 @@ from constants import *
 def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    game_clock = pygame.time.Clock()
+    dt = 0                              # delta-t
+
 
     while True:
           for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                       return
+                
+
           screen.fill((0,0,0))
           pygame.display.flip()
+          
+          # limit Framerate to 60 fps 
+          dt = game_clock.tick(60) / 1000
+          
 
 
 
     
-    print(f"Starting asteroids!\nScreen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
+    # print(f"Starting asteroids!\nScreen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
 
 
 
