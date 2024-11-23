@@ -4,7 +4,7 @@
 import pygame
 
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS,PLAYER_TURN_SPEED, PLAYER_MOVE_SPEED, PLAYER_SHOT_SPEED, PLAYER_SHOT_COOLDOWN
+from constants import PLAYER_RADIUS,PLAYER_TURN_SPEED, PLAYER_MOVE_SPEED, PLAYER_SHOT_SPEED, PLAYER_SHOT_COOLDOWN, SCREEN_HEIGHT, SCREEN_WIDTH
 from shot import Shot
 
 class Player(CircleShape):
@@ -15,9 +15,12 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_timer = 0
+        self.health = 3
+        self.color = "white"
+        self.respawn_chances = 3
     
     def draw(self, screen):
-        pygame.draw.polygon(screen, "white", self.triangle(), 2)
+        pygame.draw.polygon(screen, self.color, self.triangle(), 2)
         
     
     # in the player class
@@ -58,7 +61,24 @@ class Player(CircleShape):
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOT_SPEED
 
-    
+    def get_damaged(self):
+        self.health -= 1
+        if self.health == 2:
+            self.color = "orange"
+        if self.health == 1:
+            self.color = "red"
+        
 
+ def collision_check(self, circle):
+        while self.position.distance_to(circle.position) >= self.radius + circle.radius:
+             if self.position.distance_to(circle.position) == self.radius + circle.radius:
+                  return True
+        return False
+            
+    def respawn(self):
+            self.respawn_chances -= 1
+            self.health == 3
+            
+        
     # def move_down(self,dt):
     #     self.position += pygame.Vector2(0,-dt)
